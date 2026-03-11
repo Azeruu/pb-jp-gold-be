@@ -16,7 +16,10 @@ const adapter = new PrismaPg(pool as any)
 const prisma = new PrismaClient({ adapter })
 
 // Middleware
-app.use('*', cors())
+app.use('*', cors({
+  origin: process.env.ALLOWED_ORIGIN || '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}))
 app.use('*', clerkMiddleware())
 
 // Routes
