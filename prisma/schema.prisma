@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Session {
+  id                     String    @id @default(cuid())
+  date                   DateTime
+  initial_cash           Float
+  shuttlecocks_remaining Int?
+  user_id                String
+  user_name              String?   // Simpan nama dari Clerk
+  user_email             String?   // Simpan email dari Clerk
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  expenses               Expense[]
+  players                Player[]
+
+  @@index([user_id])
+}
+
+model Expense {
+  id         String   @id @default(cuid())
+  name       String
+  amount     Float
+  session_id String
+  session    Session  @relation(fields: [session_id], references: [id], onDelete: Cascade)
+
+  @@index([session_id])
+}
+
+model Player {
+  id                  String   @id @default(cuid())
+  name                String
+  contribution_amount Float
+  has_paid            Boolean  @default(true)
+  session_id          String
+  session             Session  @relation(fields: [session_id], references: [id], onDelete: Cascade)
+
+  @@index([session_id])
+}
