@@ -59,7 +59,8 @@ app.post('/sessions', async (c) => {
   // Actually, Session model has user_name and user_email.
   
   const body = await c.req.json()
-  const { date, initial_cash, shuttlecocks_remaining, expenses, players, user_name, user_email } = body
+  console.log("POST /sessions INCOMING BODY:", JSON.stringify(body, null, 2))
+  const { date, initial_cash, shuttlecocks_initial, shuttlecocks_remaining, shuttlecocks_brands, expenses, players, user_name, user_email } = body
 
   if (!date || initial_cash === undefined) {
     return c.json({ error: 'Missing required fields' }, 400)
@@ -70,7 +71,9 @@ app.post('/sessions', async (c) => {
       data: {
         date: new Date(date),
         initial_cash,
+        shuttlecocks_initial,
         shuttlecocks_remaining,
+        shuttlecocks_brands,
         user_id: userId,
         user_name,
         user_email,
@@ -121,7 +124,8 @@ app.put('/sessions/:id', async (c) => {
     }
 
     const body = await c.req.json()
-    const { date, initial_cash, shuttlecocks_remaining, expenses, players, user_name, user_email } = body
+    console.log("PUT /sessions/:id INCOMING BODY:", JSON.stringify(body, null, 2))
+    const { date, initial_cash, shuttlecocks_initial, shuttlecocks_remaining, shuttlecocks_brands, expenses, players, user_name, user_email } = body
 
     const updatedSession = await prisma.$transaction(async (tx) => {
       // 1. Delete existing expenses and players
@@ -134,7 +138,9 @@ app.put('/sessions/:id', async (c) => {
         data: {
           date: new Date(date),
           initial_cash,
+          shuttlecocks_initial,
           shuttlecocks_remaining,
+          shuttlecocks_brands,
           user_name,
           user_email,
           expenses: {

@@ -10,7 +10,9 @@ model Session {
   id                     String    @id @default(cuid())
   date                   DateTime
   initial_cash           Float
+  shuttlecocks_initial   Int?
   shuttlecocks_remaining Int?
+  shuttlecocks_brands    String?
   user_id                String
   user_name              String?   // Simpan nama dari Clerk
   user_email             String?   // Simpan email dari Clerk
